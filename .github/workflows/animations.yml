@@ -1,4 +1,4 @@
-name: generate breakout svg
+name: generate animations
 
 on:
   schedule:
@@ -16,10 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: generate SVG
+      - name: generate breakout.svg
         uses: cyprieng/github-breakout@v1.0.0
         with:
           github_username: ${{ github.repository_owner }}
+
+      - name: generate github-contribution-grid-snake.svg
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
       - name: Move generated SVGs
         run: |
@@ -34,6 +42,6 @@ jobs:
 
       - name: Commit and push SVGs
         run: |
-          git add images/breakout-light.svg images/breakout-dark.svg
-          git commit -m "chore: update breakout SVGs" || echo "No changes to commit"
+          git add images/breakout-light.svg images/breakout-dark.svg dist/github-contribution-grid-snake.svg dist/github-contribution-grid-snake-dark.svg
+          git commit -m "chore: update animation SVGs" || echo "No changes to commit"
           git push
